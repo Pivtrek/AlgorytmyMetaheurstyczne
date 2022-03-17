@@ -25,6 +25,6 @@ def convertEuc2dToFullMatrix(euc2d):
 
     x = np.array(mat)
     z = np.asmatrix(x)
-    return mat
+    return z
 
 
