@@ -1,5 +1,6 @@
 import numpy as np
 import math
+from itertools import permutations
 
 
 def readFullMatrix(name):
@@ -25,6 +26,34 @@ def convertEuc2dToFullMatrix(euc2d):
 
     x = np.array(mat)
     z = np.asmatrix(x)
-    return mat
+    return z
 
+def kRandom(matrix,k):
+    numberOfCities = len(matrix)
+    route = np.random.permutation(numberOfCities)
+    routeDist = summOfRoutes(route, matrix)
+    bestRoute = route
+    bestRouteDist = routeDist
 
+    for i in range(k-1):
+        route = np.random.permutation(numberOfCities)
+        routeDist = summOfRoutes(route, matrix)
+        if routeDist < bestRouteDist:
+            bestRoute = route
+            bestRouteDist = summOfRoutes(bestRoute, matrix)
+
+    print(bestRouteDist)
+    print(bestRoute)
+    return bestRouteDist, bestRoute
+
+def summOfRoutes(array, matrix):
+    odl = 0
+    range = len(array)
+    for i in (0,(range-2)):
+        x = array[i]
+        odl += matrix[x][array[i+1]]
+
+    return odl
+
+#kRandom(readFullMatrix(fullmatrix),10)
+#print(summOfRoutes(np.random.permutation(29),readFullMatrix(fullmatrix)))
