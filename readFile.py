@@ -54,6 +54,6 @@ def summOfRoutes(array, matrix):
         odl += matrix[x][array[i+1]]
 
     return odl
-hhhh
+
 #kRandom(readFullMatrix(fullmatrix),10)
 #print(summOfRoutes(np.random.permutation(29),readFullMatrix(fullmatrix)))
