@@ -2,6 +2,9 @@ from matplotlib import pyplot as plt
 import sys
 import random 
 import copy
+import time
+import os
+import psutil
 
 class Graph:
     supported_formats = ['FULL_MATRIX', 'EUC_2D', 'LOWER_DIAG_ROW']
@@ -10,7 +13,7 @@ class Graph:
     supported_header_delimiters = ['NODE_COORD_SECTION', 'EDGE_WEIGHT_SECTION']
     
     edge_weight_format = ""
-    
+
     header = dict()
     optimal={"berlin52.tsp": 7542 ,"br17.atsp": 39,"gr120.tsp": 6942 }
     dimension = 0
@@ -152,6 +155,7 @@ class Graph:
         '''
 
     def k_random_method(self):
+        start_time = time.time()
         k=100
         print("k: ",k)
         min_dist=sys.maxsize
@@ -176,8 +180,12 @@ class Graph:
         if self.edge_weight_format == 'EUC_2D':
             self.draw_solution(path)
         self.PRD(min_dist)
+        print("Czas: %s " % (time.time()-start_time))
+        process = psutil.Process(os.getpid())
+        print("Pamięć: %s" % process.memory_info().rss)
 
     def nearest_neighbor(self):
+        start_time = time.time()
         start=random.randint(0,self.dimension-1)
         print(start)
         path=[start]
@@ -213,6 +221,9 @@ class Graph:
         if self.edge_weight_format == 'EUC_2D':
             self.draw_solution(path)
         self.PRD(min_dist)
+        print("Czas: %s " % (time.time()-start_time))
+        process = psutil.Process(os.getpid())
+        print("Pamięć: %s" % process.memory_info().rss)
 
     def extended_nearest_neighbor(self):
         pass
@@ -227,6 +238,7 @@ class Graph:
         return distance
 
     def two_opt(self):
+        start_time = time.time()
         path = [x for x in range(self.dimension)]
         best = path
         improved = True
@@ -247,6 +259,9 @@ class Graph:
         if self.edge_weight_format == 'EUC_2D':
             self.draw_solution(best)
         self.PRD(self.cost(best))
+        print("Czas: %s " % (time.time()-start_time))
+        process = psutil.Process(os.getpid())
+        print("Pamięć: %s" % process.memory_info().rss)
 
     def show_solution(self):
         print("Metoda k-random: ")

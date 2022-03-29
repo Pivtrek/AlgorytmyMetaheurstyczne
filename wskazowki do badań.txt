@@ -1,0 +1,22 @@
+analiza parametru k dla k random 
+
+zlozonosc obliczeniowa porownanie wykresu do poprawnej implementacji
+
+analiza jakościowa 
+
+porownanie instancji symetrycznych i asymetrycznych 
+
+w sprawozdaniu głównie się skupić na badaniach 
+
+wykresy, tabelki 
+
+dobrać instancje tak aby liczyło się max minutę
+
+
+
+
+Podział danych na generowanie i gotowe oraz każde z nich na symetryczne i asymetryczne
+Wykresy czasu, pamięci, 
+Złożoność algorytmów, porównanie złożoności naszego algorytmu do poprawnego
+parametr k w k-random przedstawic jako jedna wartosc ale moze byc to jakas funckja np n/2 gdzie n to ilosc miast whatever
+
