@@ -42,18 +42,74 @@ def kRandom(matrix,k):
             bestRoute = route
             bestRouteDist = summOfRoutes(bestRoute, matrix)
 
-    print(bestRouteDist)
-    print(bestRoute)
+    #print(bestRouteDist)
+    #print(bestRoute)
     return bestRouteDist, bestRoute
 
 def summOfRoutes(array, matrix):
     odl = 0
-    range = len(array)
-    for i in (0,(range-2)):
+    nodes = int(len(array))
+    for i in range(0,(nodes-1)):
+        print(i)
         x = array[i]
         odl += matrix[x][array[i+1]]
 
     return odl
 
+
+def twoOptInvert(actualRoute, i, j):
+    routeSize = len(actualRoute)
+
+    print(actualRoute)
+    print(actualRoute[i])
+    print(actualRoute[j])
+    newRoute = list(range(0))
+    for k in range(0,i):
+        newRoute.append(actualRoute[k])
+
+    for k in range(j,i-1,-1):
+        newRoute.append(actualRoute[k])
+
+    for k in range(j+1,routeSize):
+        newRoute.append(actualRoute[k])
+    print(newRoute)
+    return newRoute
+
+
+def generateBestNeighbour(route, matrix):
+    print(route)
+    currentRoute = route
+    currentBestDist = summOfRoutes(currentRoute, matrix)
+    routeSize = len(route)
+
+    for i in range(0,(routeSize-1)):
+        for j in range(i+1,routeSize):
+            newRoute = twoOptInvert(route,i,j)
+            newDist = summOfRoutes(newRoute, matrix)
+            if newDist < currentBestDist:
+                print("znalazlam lepszego")
+                currentRoute = newRoute
+                currentBestDist = summOfRoutes(currentRoute, matrix)
+            
+    return currentRoute
+
+def twoOpt(route,matrix):
+    newRoute = route
+    print(newRoute)
+    while True:
+        newRoute = generateBestNeighbour(newRoute, matrix)
+        if newRoute == route:
+            print("newRoute == route")
+            break
+
+    return newRoute
+
+
+
 #kRandom(readFullMatrix(fullmatrix),10)
 #print(summOfRoutes(np.random.permutation(29),readFullMatrix(fullmatrix)))
+
+twoOpt(kRandom(readFullMatrix(fullmatrix),10)[1], fullmatrix)
+
+#array = list(range(10))
+#twoOptInvert(array,4,7)

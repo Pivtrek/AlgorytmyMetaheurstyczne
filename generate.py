@@ -2,6 +2,8 @@ import random
 import sys
 import copy
 import time
+import os
+import psutil
 class GenerateGraph:
 	supported_formats = ['FULL_MATRIX', 'EUC_2D', 'LOWER_DIAG_ROW']
 	supported_format_keys = ['EDGE_WEIGHT_FORMAT', 'EDGE_WEIGHT_TYPE']
@@ -80,6 +82,7 @@ class GenerateGraph:
 
 
 	def k_random_method(self):
+		start_time = time.time()
 		k=100
 		print("k: ",k)
 		min_dist=sys.maxsize
@@ -90,18 +93,27 @@ class GenerateGraph:
 			distance=0
 			for i in range(len(vertex)):
 				if i+1==len(vertex):
-					distance=distance+self.matrix[vertex[i]][vertex[0]]
+					distance=distance+int(self.matrix[vertex[i]][vertex[0]])
 					break
-				distance=distance+self.matrix[vertex[i]][vertex[i+1]]
+				if(int(self.matrix[vertex[i]][vertex[i+1]])==0):
+					continue
+				distance=distance+int(self.matrix[vertex[i]][vertex[i+1]])
 			if(distance<min_dist):
 				min_dist=distance
 				path=vertex.copy()
 		print("Droga: ",min_dist)
 		print("Cykl: ",path)
+		#self.test_cost(path)
+		if self.edge_weight_format == 'EUC_2D':
+			self.draw_solution(path)
+		print("Czas: %s " % (time.time()-start_time))
+		process = psutil.Process(os.getpid())
+		print("Pamięć: %s" % process.memory_info().rss)
 
 	def nearest_neighbor(self):
+		start_time = time.time()
 		start=random.randint(0,self.dimension-1)
-		print("Startowy wierzchołek: ",start)
+		#print(start)
 		path=[start]
 		min_dist=0
 		matrix_copy=copy.deepcopy(self.matrix)
@@ -115,24 +127,72 @@ class GenerateGraph:
 					if j not in path:
 						if(distances[counter]==0):
 							counter=counter+1
-							j=j-1
+							j=-1
 						else:
-							min_dist=min_dist+distances[counter]
+							min_dist=min_dist+int(distances[counter])
 							path.append(j)
 							start=j
 							counter=0
 							break
 				j=j+1
 				if(j==self.dimension):
-					j=0 
+					j=0
 					counter=counter+1
+				if(counter==self.dimension):
+					print("Ślepy zaułek")
+					return
 		print("Droga: ",min_dist)
+		#self.test_cost(path)
 		print("Cykl: ",path)
+		if self.edge_weight_format == 'EUC_2D':
+			self.draw_solution(path)
+		print("Czas: %s " % (time.time()-start_time))
+		process = psutil.Process(os.getpid())
+		print("Pamięć: %s" % process.memory_info().rss)
 
 
 
 	def extended_nearest_neighbor(self):
-		pass
+		currentStart = 0
+		start_time = time.time()
+		for i in range(0,self.dimension):
+			start= i
+			#print(start)
+			path=[start]
+			min_dist=0
+			matrix_copy=copy.deepcopy(self.matrix)
+			while(len(path)!=self.dimension):
+				distances=matrix_copy[start]
+				distances.sort()
+				counter=0
+				j=0
+				while j < self.dimension:
+					if distances[counter]==self.matrix[start][j]:
+						if j not in path:
+							if(distances[counter]==0):
+								counter=counter+1
+								j=-1
+							else:
+								min_dist=min_dist+int(distances[counter])
+								path.append(j)
+								start=j
+								counter=0
+								break
+					j=j+1
+					if(j==self.dimension):
+						j=0
+						counter=counter+1
+					if(counter==self.dimension):
+						print("Ślepy zaułek")
+						return
+		print("Droga: ",min_dist)
+		#self.test_cost(path)
+		print("Cykl: ",path)
+		if self.edge_weight_format == 'EUC_2D':
+			self.draw_solution(path)
+		print("Czas: %s " % (time.time()-start_time))
+		process = psutil.Process(os.getpid())
+		print("Pamięć: %s" % process.memory_info().rss)
 
 	def cost(self,vertex):
 		distance=0
@@ -144,6 +204,7 @@ class GenerateGraph:
 		return distance
 
 	def two_opt(self):
+		start_time = time.time()
 		path = [x for x in range(self.dimension)]
 		best = path
 		improved = True
@@ -160,6 +221,12 @@ class GenerateGraph:
 			path = best
 		print("Droga: ",self.cost(best))
 		print("Cykl: ", path)
+		#self.test_cost(path)
+		if self.edge_weight_format == 'EUC_2D':
+			self.draw_solution(best)
+		print("Czas: %s " % (time.time()-start_time))
+		process = psutil.Process(os.getpid())
+		print("Pamięć: %s" % process.memory_info().rss)
 
 
 	def show_solution(self):
