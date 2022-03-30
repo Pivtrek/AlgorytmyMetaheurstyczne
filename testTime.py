@@ -18,10 +18,11 @@ class TestTime:
     neighborMemSolution = [0]*14
     extendedNeighborMemSolution = [0]*14
     optMemSolution = [0]*14
+    dimension = 10
 
     def __init__(self):
         self.variant='FULL_MATRIX'
-        self.seed=random(100)
+        self.seed=random.seed(100)
         self.upper_bound=100
         self.repetitions=10
         for j in range(self.repetitions):
@@ -29,7 +30,6 @@ class TestTime:
             for i in range(10,150,10):
                 self.dimension=i
                 self.generate()
-                self.generate_path()
                 self.currentNode += 1
 
         for j in range(self.repetitions):
@@ -45,6 +45,7 @@ class TestTime:
         self.draw_solution()
 
     def generate(self):
+        newMatrix = []
         if(self.variant=='FULL_MATRIX'):
             for i in range(self.dimension):
                 row=[]
@@ -53,7 +54,8 @@ class TestTime:
                         row.append(9999)
                     else:
                         row.append(random.randint(1,self.upper_bound))
-                self.matrix.append(row)
+                newMatrix.append(row)
+            self.matrix = newMatrix
         elif(self.variant=='EUC_2D'):
             for i in range(self.dimension):
                 row=[]
@@ -64,10 +66,11 @@ class TestTime:
                     else:
                         value=random.randint((self.upper_bound/2)+1,self.upper_bound)
                         row.append(value)
-                self.matrix.append(row)
+            newMatrix.append(row)
             for i in range(self.dimension):
                 for j in range(i+1,self.dimension):
-                    self.matrix[i].append(self.matrix[j][i])
+                    newMatrix[i].append(newMatrix[j][i])
+            self.matrix = newMatrix
 
         elif(self.variant=='LOWER_DIAG_ROW'):
             for i in range(self.dimension):
@@ -78,10 +81,11 @@ class TestTime:
                         break
                     else:
                         row.append(random.randint(1,self.upper_bound))
-                self.matrix.append(row)
+            newMatrix.append(row)
             for i in range(self.dimension):
                 for j in range(i+1,self.dimension):
-                    self.matrix[i].append(self.matrix[j][i])
+                    newMatrix[i].append(newMatrix[j][i])
+            self.matrix = newMatrix
         else:
             print("Unsupported type of problem, please choose one from list down below: ")
             for item in self.supported_formats:
@@ -107,7 +111,7 @@ class TestTime:
 
     def k_random_method(self):
         start_time = time.time()
-        k=100
+        k=100*self.dimension
         print("k: ",k)
         min_dist=sys.maxsize
         vertex=[x for x in range(self.dimension)]
@@ -128,9 +132,10 @@ class TestTime:
         #print("Droga: ",min_dist)
         #print("Cykl: ",path)
         #self.test_cost(path)
-        self.kRandomTimeSolution +=  (time.time()-start_time)
+        self.kRandomTimeSolution[self.currentNode] +=  (time.time()-start_time)
         process = psutil.Process(os.getpid())
-        print("Pamięć: %s" % process.memory_info().rss)
+        #print("Pamięć: %s" % process.memory_info().rss)
+        self.kRandomMemSolution[self.currentNode] += process.memory_info().rss
 
     def nearest_neighbor(self):
         start_time = time.time()
@@ -163,14 +168,14 @@ class TestTime:
                 if(counter==self.dimension):
                     print("Ślepy zaułek")
                     return
-        print("Droga: ",min_dist)
+        #print("Droga: ",min_dist)
         #self.test_cost(path)
-        print("Cykl: ",path)
-        if self.edge_weight_format == 'EUC_2D':
-            self.draw_solution(path)
-        print("Czas: %s " % (time.time()-start_time))
+        #print("Cykl: ",path)
+        #print("Czas: %s " % (time.time()-start_time))
+        self.neighborTimeSolution[self.currentNode] += (time.time()-start_time)
         process = psutil.Process(os.getpid())
-        print("Pamięć: %s" % process.memory_info().rss)
+        #print("Pamięć: %s" % process.memory_info().rss)
+        self.neighborMemSolution[self.currentNode] += process.memory_info().rss
 
 
 
@@ -207,14 +212,14 @@ class TestTime:
                     if(counter==self.dimension):
                         print("Ślepy zaułek")
                         return
-        print("Droga: ",min_dist)
+        #print("Droga: ",min_dist)
         #self.test_cost(path)
-        print("Cykl: ",path)
-        if self.edge_weight_format == 'EUC_2D':
-            self.draw_solution(path)
-        print("Czas: %s " % (time.time()-start_time))
+        #print("Cykl: ",path)
+        #print("Czas: %s " % (time.time()-start_time))
+        self.extendedNeighborTimeSolution[self.currentNode] += (time.time()-start_time)
         process = psutil.Process(os.getpid())
-        print("Pamięć: %s" % process.memory_info().rss)
+        self.extendedNeighborMemSolution[self.currentNode] += process.memory_info().rss
+        #print("Pamięć: %s" % process.memory_info().rss)
 
     def cost(self,vertex):
         distance=0
@@ -241,15 +246,25 @@ class TestTime:
                         best = new_route
                         improved = True
             path = best
-        print("Droga: ",self.cost(best))
-        print("Cykl: ", path)
+        #print("Droga: ",self.cost(best))
+        #print("Cykl: ", path)
         #self.test_cost(path)
-        if self.edge_weight_format == 'EUC_2D':
-            self.draw_solution(best)
-        print("Czas: %s " % (time.time()-start_time))
+        #print("Czas: %s " % (time.time()-start_time))
+        self.optTimeSolution[self.currentNode] += (time.time()-start_time)
         process = psutil.Process(os.getpid())
-        print("Pamięć: %s" % process.memory_info().rss)
+        self.optMemSolution[self.currentNode] += process.memory_info().rss
+        #print("Pamięć: %s" % process.memory_info().rss)
     pass
 
     def draw_solution(self):
+        #plt.plot(range(10,150,10), self.kRandomTimeSolution, color="blue", marker="o", markersize=2)
+        #plt.plot(range(10,150,10), self.neighborTimeSolution, color="red", marker="o", markersize=2)
+        #plt.plot(range(10,150,10), self.extendedNeighborTimeSolution, color="pink", marker="o", markersize=2)
+        #plt.plot(range(10,150,10), self.optTimeSolution, color="green", marker="o", markersize=2)
+        #plt.show()
+        plt.plot(range(10,150,10), self.kRandomMemSolution, color="blue", marker="o", markersize=2)
+        plt.plot(range(10,150,10), self.neighborMemSolution, color="red", marker="o", markersize=2)
+        plt.plot(range(10,150,10), self.extendedNeighborMemSolution, color="pink", marker="o", markersize=2)
+        plt.plot(range(10,150,10), self.optMemSolution, color="green", marker="o", markersize=2)
+        plt.show()
         pass
