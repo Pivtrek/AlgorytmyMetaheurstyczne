@@ -19,4 +19,10 @@ Podział danych na generowanie i gotowe oraz każde z nich na symetryczne i asym
 Wykresy czasu, pamięci, 
 Złożoność algorytmów, porównanie złożoności naszego algorytmu do poprawnego
 parametr k w k-random przedstawic jako jedna wartosc ale moze byc to jakas funckja np n/2 gdzie n to ilosc miast whatever
+###
+
+Porównać oryginalne czasy z czasami naszych algorytmów
+Uśrednić analizę jakościową dla kilku instancji
+
+
 
