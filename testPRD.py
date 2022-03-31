@@ -15,9 +15,9 @@ class TestPrd:
     edge_weight_format = ""
 
     header = dict()
-    optimal={"ulysses16.tsp": 0, "gr24.tsp": 0, "bays29.tsp" : 0, "berlin52.tsp": 7542 , "eil76.tsp" : 0, "gr96.tsp" : 0,"eil101.tsp" : 0, "lin105.tsp" : 0,"gr120.tsp": 6942, "ch150.tsp" : 0 }
-    files = ["berlin52.tsp", "gr120.tsp"]
-    numberOfCities = [52, 120]
+    optimal={"br17.atsp": 39, "gr24.tsp": 1278,"bays29.tsp": 2108,"berlin52.tsp": 7542,"eil76.tsp": 570,"eil101.tsp: 3187": 2918, "lin105.tsp": 14941, "gr120.tsp": 6942}
+    files = ["br17.atsp", "gr24.tsp","bays29.tsp","berlin52.tsp","eil76.tsp","eil101.tsp: 3187", "lin105.tsp", "gr120.tsp"]
+    numberOfCities = [17, 24, 29, 52, 76, 101, 105, 120]
     currentCity = 0
     dimension = 0
     matrix = []

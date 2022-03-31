@@ -1,0 +1,4 @@
+k - random:O(n^2)
+NN:O(n^2)
+RNN:O(n^3)
+2-opt: Jedna operacja O(n^2)

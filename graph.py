@@ -15,8 +15,7 @@ class Graph:
     edge_weight_format = ""
 
     header = dict()
-    optimal={"berlin52.tsp": 7542 ,"br17.atsp": 39,"gr120.tsp": 6942 }
-    dimension = 0
+    optimal={"br17.atsp": 39, "gr24.tsp": 1278,"bays29.tsp": 2108,"berlin52.tsp": 7542,"eil76.tsp": 570,"eil101.tsp: 3187": 2918, "lin105.tsp": 14941, "gr120.tsp": 6942}
     matrix = []
     coordinates = dict()
     path = []
