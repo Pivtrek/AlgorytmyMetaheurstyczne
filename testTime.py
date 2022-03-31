@@ -25,6 +25,7 @@ class TestTime:
         self.seed=random.seed(100)
         self.upper_bound=100
         self.repetitions=10
+        print("dlugosc probek ", len(self.kRandomTimeSolution))
         for j in range(self.repetitions):
             self.currentNode = 0
             for i in range(10,150,10):
@@ -32,7 +33,7 @@ class TestTime:
                 self.generate()
                 self.currentNode += 1
 
-        for j in range(self.repetitions):
+        for j in range(len(self.kRandomTimeSolution)):
             self.kRandomTimeSolution[j] = self.kRandomTimeSolution[j]/self.repetitions
             self.neighborTimeSolution[j] = self.neighborTimeSolution[j]/self.repetitions
             self.extendedNeighborTimeSolution[j] = self.extendedNeighborTimeSolution[j]/self.repetitions
@@ -257,14 +258,14 @@ class TestTime:
     pass
 
     def draw_solution(self):
-        #plt.plot(range(10,150,10), self.kRandomTimeSolution, color="blue", marker="o", markersize=2)
-        #plt.plot(range(10,150,10), self.neighborTimeSolution, color="red", marker="o", markersize=2)
-        #plt.plot(range(10,150,10), self.extendedNeighborTimeSolution, color="pink", marker="o", markersize=2)
-        #plt.plot(range(10,150,10), self.optTimeSolution, color="green", marker="o", markersize=2)
-        #plt.show()
-        plt.plot(range(10,150,10), self.kRandomMemSolution, color="blue", marker="o", markersize=2)
-        plt.plot(range(10,150,10), self.neighborMemSolution, color="red", marker="o", markersize=2)
-        plt.plot(range(10,150,10), self.extendedNeighborMemSolution, color="pink", marker="o", markersize=2)
-        plt.plot(range(10,150,10), self.optMemSolution, color="green", marker="o", markersize=2)
+        plt.plot(range(10,150,10), self.kRandomTimeSolution, color="blue", marker="o", markersize=2)
+        plt.plot(range(10,150,10), self.neighborTimeSolution, color="red", marker="o", markersize=2)
+        plt.plot(range(10,150,10), self.extendedNeighborTimeSolution, color="pink", marker="o", markersize=2)
+        plt.plot(range(10,150,10), self.optTimeSolution, color="green", marker="o", markersize=2)
         plt.show()
+        #plt.plot(range(10,150,10), self.kRandomMemSolution, color="blue", marker="o", markersize=2)
+        #plt.plot(range(10,150,10), self.neighborMemSolution, color="red", marker="o", markersize=2)
+        #plt.plot(range(10,150,10), self.extendedNeighborMemSolution, color="pink", marker="o", markersize=2)
+        #plt.plot(range(10,150,10), self.optMemSolution, color="green", marker="o", markersize=2)
+        #plt.show()
         pass
